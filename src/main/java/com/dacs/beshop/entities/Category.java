@@ -19,5 +19,6 @@ public class Category {
     private Integer id;
     private String name;
     private String description;
+    private String image;
     private LocalDateTime createdAt;
 }
