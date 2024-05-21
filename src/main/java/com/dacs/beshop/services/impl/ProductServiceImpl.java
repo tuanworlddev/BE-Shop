@@ -53,13 +53,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void addProduct(ProductRequestDto productDto) {
+        LocalDateTime now = LocalDateTime.now();
         Product product = Product.builder()
                 .name(productDto.getName())
                 .description(productDto.getDescription())
                 .price(productDto.getPrice())
                 .image(productDto.getImage())
                 .category(CategoryMapper.toCategory(categoryService.getCategoryById(productDto.getCategoryId())))
-                .createdAt(LocalDateTime.now())
+                .createdAt(now)
+                .updatedAt(now)
+                .sale(productDto.getSale() == null ? 0.0f : productDto.getSale())
+                .quantity(productDto.getQuantity())
                 .build();
         product = productRepository.save(product);
 

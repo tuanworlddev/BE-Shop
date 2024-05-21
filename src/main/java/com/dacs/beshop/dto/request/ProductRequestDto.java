@@ -14,5 +14,7 @@ public class ProductRequestDto {
     private BigDecimal price;
     private Integer categoryId;
     private String image;
+    private Float sale;
+    private Integer quantity;
     private List<ProductAttributeRequestDto> attributes;
 }
