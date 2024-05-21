@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<ResponseDto> handleUserAlreadyExistsException(AlreadyExistsException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDto(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseDto(HttpStatus.CONFLICT.value(), e.getMessage()));
     }
 
     @ExceptionHandler(InvalidException.class)

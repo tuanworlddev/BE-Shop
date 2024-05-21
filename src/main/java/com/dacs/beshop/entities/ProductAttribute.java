@@ -17,19 +17,16 @@ public class ProductAttribute {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
     @Column(name = "type")
-    @Enumerated(EnumType.STRING)
-    private ProductType productType;
-
+    private String type;
+    @Column(name = "value")
     private String value;
-
-    private String sku;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
 }

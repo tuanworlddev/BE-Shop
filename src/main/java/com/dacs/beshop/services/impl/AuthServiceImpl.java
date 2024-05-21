@@ -45,4 +45,10 @@ public class AuthServiceImpl implements AuthService {
         }
         throw new InvalidException("Refresh token invalid");
     }
+
+    @Override
+    public User getUserByToken(String token) {
+        String email = jwtService.extractEmail(token);
+        return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
+    }
 }

@@ -28,4 +28,9 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private OrderDetail orderDetail;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
 }

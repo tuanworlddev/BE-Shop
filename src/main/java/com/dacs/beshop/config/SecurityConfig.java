@@ -46,9 +46,12 @@ public class SecurityConfig {
                 jwtAuthFilter, UsernamePasswordAuthenticationFilter.class
         );
         http.authorizeHttpRequests(request -> {
-            request.requestMatchers(HttpMethod.GET, "/api/users/**").permitAll();
+            request.requestMatchers(HttpMethod.POST, "/api/users").permitAll();
             request.requestMatchers(HttpMethod.DELETE, "/api/users/**").hasAnyAuthority(Role.ADMIN.name());
-            request.requestMatchers("/api/auth/**").permitAll();
+            request.requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/logout", "/api/auth/refresh-token").permitAll();
+            request.requestMatchers(HttpMethod.GET, "/api/auth/user").authenticated();
+            request.requestMatchers("/api/products/**").permitAll();
+            request.requestMatchers("/api/categories/**").permitAll();
         });
         return http.build();
     }
