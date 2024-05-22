@@ -15,8 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-    private final String secretKey = "THEONLYWAYTODOGREATWORKISTOLOVEWHATYOUDOSPEDD1000KM";
-    private Map<String, Long> tokenBackList = new ConcurrentHashMap<>();
+    private final Map<String, Long> tokenBackList = new ConcurrentHashMap<>();
 
     @Override
     public String extractEmail(String token) {
@@ -60,6 +59,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private SecretKey getSecretKey() {
+        String secretKey = "THEONLYWAYTODOGREATWORKISTOLOVEWHATYOUDOSPEDD1000KM";
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         return Keys.hmacShaKeyFor(bytes);
     }

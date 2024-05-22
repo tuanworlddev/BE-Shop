@@ -1,31 +1,21 @@
 package com.dacs.beshop.mapper;
 
-import com.dacs.beshop.dto.response.ProductAttributeDto;
-import com.dacs.beshop.dto.response.ProductDto;
+import com.dacs.beshop.dto.request.ProductRequestDto;
+import com.dacs.beshop.dto.response.ProductResponseDto;
 import com.dacs.beshop.entities.Product;
 
-import java.util.List;
-
 public class ProductMapper {
-    public static ProductDto toProductDto(Product product) {
-        ProductDto productDto = ProductDto.builder()
+    public static ProductResponseDto toProductDto(Product product) {
+        return ProductResponseDto.builder()
                 .id(product.getId())
                 .name(product.getName())
-                .price(product.getPrice())
-                .quantity(product.getQuantity())
-                .sale(product.getSale())
                 .description(product.getDescription())
-                .image(product.getImage())
                 .category(product.getCategory().getName())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
+                .variants(product.getVariants().stream().map(ProductVariantMapper::toProductVariantResponseDto).toList())
+                .images(product.getImages().stream().map(ProductImageMapper::toImageResponseDto).toList())
                 .build();
-
-        List<ProductAttributeDto> attributeDtos = product.getAttributes().stream()
-                .map(ProductAttributeMapper::toProductAttributeDto)
-                .toList();
-        productDto.setAttributes(attributeDtos);
-
-        return productDto;
     }
+
 }

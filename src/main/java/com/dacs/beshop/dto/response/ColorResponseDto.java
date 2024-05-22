@@ -4,12 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Builder
-public class ProductAttributeDto {
-    private String type;
+public class ColorResponseDto {
+    private Integer id;
+    private String name;
     private String value;
 }

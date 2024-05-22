@@ -1,14 +1,14 @@
 package com.dacs.beshop.services;
 
 import com.dacs.beshop.dto.request.ProductRequestDto;
-import com.dacs.beshop.dto.response.ProductDto;
+import com.dacs.beshop.entities.Product;
 
 import java.util.List;
 
 public interface ProductService {
-    List<ProductDto> getAllProducts();
-    List<ProductDto> getProductsByCategory(Integer categoryId);
-    ProductDto getProductById(int id);
-    void addProduct(ProductRequestDto productDto);
-    void deleteProduct(Integer id);
+    List<Product> getAllProducts();
+    List<Product> getProductsByCategory(Integer categoryId);
+    Product getProductById(Integer id);
+    void addProduct(ProductRequestDto productRequestDto);
+
 }

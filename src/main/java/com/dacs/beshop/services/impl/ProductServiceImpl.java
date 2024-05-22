@@ -1,83 +1,69 @@
 package com.dacs.beshop.services.impl;
 
-import com.dacs.beshop.dto.request.ProductAttributeRequestDto;
 import com.dacs.beshop.dto.request.ProductRequestDto;
-import com.dacs.beshop.dto.response.ProductDto;
+import com.dacs.beshop.dto.request.ProductVariantRequestDto;
+import com.dacs.beshop.entities.Category;
 import com.dacs.beshop.entities.Product;
 import com.dacs.beshop.exceptions.NotFoundException;
-import com.dacs.beshop.mapper.CategoryMapper;
-import com.dacs.beshop.mapper.ProductMapper;
 import com.dacs.beshop.repositories.ProductRepository;
 import com.dacs.beshop.services.CategoryService;
-import com.dacs.beshop.services.ProductAttributeService;
+import com.dacs.beshop.services.ProductImageService;
 import com.dacs.beshop.services.ProductService;
+import com.dacs.beshop.services.ProductVariantService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final ProductAttributeService productAttributeService;
+    private final ProductVariantService productVariantService;
+    private final ProductImageService productImageService;
     private final CategoryService categoryService;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductAttributeService productAttributeService, CategoryService categoryService) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductVariantService productVariantService, ProductImageService productImageService, CategoryService categoryService) {
         this.productRepository = productRepository;
-        this.productAttributeService = productAttributeService;
+        this.productVariantService = productVariantService;
+        this.productImageService = productImageService;
         this.categoryService = categoryService;
     }
 
     @Override
-    public List<ProductDto> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-        List<Product> sortedProducts = products.stream()
-                .sorted(Comparator.comparing(Product::getCreatedAt).reversed())
-                .toList();
-        return sortedProducts.stream().map(ProductMapper::toProductDto).collect(Collectors.toList());
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
     @Override
-    public List<ProductDto> getProductsByCategory(Integer categoryId) {
-        List<Product> products = productRepository.findAllByCategoryId(categoryId);
-        return products.stream().map(ProductMapper::toProductDto).collect(Collectors.toList());
+    public List<Product> getProductsByCategory(Integer categoryId) {
+        Category category = categoryService.getCategoryById(categoryId);
+        return productRepository.findProductsByCategory(category);
     }
 
     @Override
-    public ProductDto getProductById(int id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Product not found"));
-        return ProductMapper.toProductDto(product);
+    public Product getProductById(Integer id) {
+        return productRepository.findById(id).orElseThrow(() -> new NotFoundException("Product not found"));
     }
 
     @Override
-    public void addProduct(ProductRequestDto productDto) {
-        LocalDateTime now = LocalDateTime.now();
+    @Transactional
+    public void addProduct(ProductRequestDto productRequestDto) {
         Product product = Product.builder()
-                .name(productDto.getName())
-                .description(productDto.getDescription())
-                .price(productDto.getPrice())
-                .image(productDto.getImage())
-                .category(CategoryMapper.toCategory(categoryService.getCategoryById(productDto.getCategoryId())))
-                .createdAt(now)
-                .updatedAt(now)
-                .sale(productDto.getSale() == null ? 0.0f : productDto.getSale())
-                .quantity(productDto.getQuantity())
+                .name(productRequestDto.getName())
+                .description(productRequestDto.getDescription())
+                .category(categoryService.getCategoryById(productRequestDto.getCategoryId()))
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
-        product = productRepository.save(product);
+        final Product savedProduct = productRepository.save(product);
 
-        for (ProductAttributeRequestDto productAttributeDto : productDto.getAttributes()) {
-            productAttributeService.addProductAttribute(product, productAttributeDto);
-        }
+        productRequestDto.getVariants().forEach(variantDto ->
+                productVariantService.addProductVariant(variantDto, savedProduct)
+        );
 
-    }
-
-    @Override
-    public void deleteProduct(Integer id) {
-        if (!productRepository.existsProductById(id)) {
-            throw new NotFoundException("Product not found");
-        }
-        productRepository.deleteById(id);
+        productRequestDto.getImages().forEach(imageUrl ->
+                productImageService.addProductImage(imageUrl, savedProduct)
+        );
     }
 }

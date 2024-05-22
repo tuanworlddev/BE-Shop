@@ -4,38 +4,38 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "cart_item")
+@Table(name = "order_details")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartItem {
+public class OrderDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
-    private Cart cart;
-
-    @ManyToOne
-    @JoinColumn(name = "product_variant_id", nullable = false)
-    private ProductVariant productVariant;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column
-    private int quantity;
+    private Double total;
 
     @Column
-    private Double price;
+    private String status;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "orderDetails", cascade = CascadeType.ALL)
+    private List<OrderItem> items;
 
     @PrePersist
     protected void onCreate() {
@@ -47,5 +47,4 @@ public class CartItem {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
 }

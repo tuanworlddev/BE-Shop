@@ -3,26 +3,18 @@ package com.dacs.beshop.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "categories")
+@Table(name = "sizes")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Category {
+public class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String name;
-
-    @Column
-    private String description;
-
-    @Column
-    private String image;
 }

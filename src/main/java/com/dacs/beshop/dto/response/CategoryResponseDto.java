@@ -7,8 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class CategoryDto {
+public class CategoryResponseDto {
     private Integer id;
     private String name;
     private String image;
+    private String description;
 }
