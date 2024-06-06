@@ -9,5 +9,6 @@ import java.util.List;
 public interface ProductVariantService {
     ProductVariant getProductVariant(Integer id);
     List<ProductVariant> getAllProductVariants();
-    ProductVariant addProductVariant(ProductVariantRequestDto productVariantRequestDto, Product product);
+    void addProductVariant(ProductVariantRequestDto productVariantRequestDto, Product product);
+    void deleteProductVariant(Integer id);
 }

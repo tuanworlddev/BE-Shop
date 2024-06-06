@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -32,7 +33,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        List<Product> products = productRepository.findAll();
+        List<Product> productsToDelete = products.stream()
+                .filter(product -> product.getVariants().isEmpty())
+                .toList();
+        if (!productsToDelete.isEmpty()) {
+            productRepository.deleteAll(productsToDelete);
+        }
+        return products.stream()
+                .filter(product -> !product.getVariants().isEmpty())
+                .collect(Collectors.toList());
     }
 
     @Override

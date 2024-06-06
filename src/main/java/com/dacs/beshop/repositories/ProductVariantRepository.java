@@ -4,4 +4,5 @@ import com.dacs.beshop.entities.ProductVariant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductVariantRepository extends JpaRepository<ProductVariant, Integer> {
+    boolean existsById(Integer id);
 }

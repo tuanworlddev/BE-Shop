@@ -49,6 +49,9 @@ public class SecurityConfig {
             request.requestMatchers(HttpMethod.GET, "/api/auth/user").authenticated();
             request.requestMatchers("/api/products/**").permitAll();
             request.requestMatchers("/api/categories/**").permitAll();
+            request.requestMatchers("/api/product-variants/**").permitAll();
+            request.requestMatchers("/api/colors/**").permitAll();
+            request.requestMatchers("/api/sizes/**").permitAll();
         });
         return http.build();
     }

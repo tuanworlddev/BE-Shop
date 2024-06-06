@@ -9,7 +9,7 @@ public class ProductVariantMapper {
                 .id(productVariant.getId())
                 .price(productVariant.getPrice())
                 .color(ColorMapper.toColorResponseDto(productVariant.getColor()))
-                .size(productVariant.getSize().getName())
+                .size(SizeMapper.toSizeResponseDto(productVariant.getSize()))
                 .quantity(productVariant.getQuantity())
                 .sale(productVariant.getSale())
                 .build();

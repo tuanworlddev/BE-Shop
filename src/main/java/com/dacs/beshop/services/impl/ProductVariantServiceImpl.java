@@ -35,7 +35,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     }
 
     @Override
-    public ProductVariant addProductVariant(ProductVariantRequestDto productVariantRequestDto, Product product) {
+    public void addProductVariant(ProductVariantRequestDto productVariantRequestDto, Product product) {
         ProductVariant productVariant = ProductVariant.builder()
                 .product(product)
                 .size(sizeService.getSizeById(productVariantRequestDto.getSizeId()))
@@ -44,6 +44,15 @@ public class ProductVariantServiceImpl implements ProductVariantService {
                 .quantity(productVariantRequestDto.getQuantity())
                 .sale(productVariantRequestDto.getSale())
                 .build();
-        return productVariantRepository.save(productVariant);
+        productVariantRepository.save(productVariant);
     }
+
+    @Override
+    public void deleteProductVariant(Integer id) {
+        if (!productVariantRepository.existsById(id)) {
+            throw new NotFoundException("Product variant not found");
+        }
+        productVariantRepository.deleteById(id);
+    }
+
 }

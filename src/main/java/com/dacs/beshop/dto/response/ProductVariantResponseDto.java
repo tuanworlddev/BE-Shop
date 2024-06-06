@@ -9,7 +9,7 @@ import lombok.Setter;
 @Builder
 public class ProductVariantResponseDto {
     private Integer id;
-    private String size;
+    private SizeResponseDto size;
     private ColorResponseDto color;
     private Integer quantity;
     private Double price;
