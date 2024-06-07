@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ProductService {
     List<Product> getAllProducts();
+    List<Product> getProductByQuery(String query);
     List<Product> getProductsByCategory(Integer categoryId);
     Product getProductById(Integer id);
     void addProduct(ProductRequestDto productRequestDto);

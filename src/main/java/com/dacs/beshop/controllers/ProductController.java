@@ -32,6 +32,11 @@ public class ProductController {
         return ProductMapper.toProductDto(product);
     }
 
+    @GetMapping("/search")
+    public List<ProductResponseDto> getProductByQuery(@RequestParam("query") String query) {
+        return productService.getProductByQuery(query).stream().map(ProductMapper::toProductDto).toList();
+    }
+
     @GetMapping("/category/{id}")
     public List<ProductResponseDto> getProductsByCategory(@PathVariable Integer id) {
         return productService.getProductsByCategory(id).stream().map(ProductMapper::toProductDto).toList();

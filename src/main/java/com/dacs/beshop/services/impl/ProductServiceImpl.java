@@ -46,6 +46,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> getProductByQuery(String query) {
+        return productRepository.findProductsByNameContains(query);
+    }
+
+    @Override
     public List<Product> getProductsByCategory(Integer categoryId) {
         Category category = categoryService.getCategoryById(categoryId);
         return productRepository.findProductsByCategory(category);
