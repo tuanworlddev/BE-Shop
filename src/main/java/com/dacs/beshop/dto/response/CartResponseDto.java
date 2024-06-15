@@ -1,6 +1,8 @@
 package com.dacs.beshop.dto.response;
 
+import com.dacs.beshop.dto.request.ProductVariantRequestDto;
 import com.dacs.beshop.entities.Product;
+import com.dacs.beshop.entities.ProductVariant;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +14,8 @@ import java.util.List;
 @Builder
 public class CartResponseDto {
     private Integer id;
-    private Double total;
-    private List<CartItemResponseDto> cartItems;
+    private String productName;
+    private String productImage;
+    private ProductVariantResponseDto variant;
+    private Integer quantity;
 }

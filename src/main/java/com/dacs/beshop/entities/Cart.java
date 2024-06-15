@@ -22,17 +22,17 @@ public class Cart {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column
-    private Double total;
+    @ManyToOne
+    @JoinColumn(name = "product_variant_id", nullable = false)
+    private ProductVariant productVariant;
+
+    private Integer quantity;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    private List<CartItem> items;
 
     @PrePersist
     protected void onCreate() {

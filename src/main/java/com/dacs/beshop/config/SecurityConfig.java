@@ -53,7 +53,7 @@ public class SecurityConfig {
             request.requestMatchers("/api/product-variants/**").permitAll();
             request.requestMatchers("/api/colors/**").permitAll();
             request.requestMatchers("/api/sizes/**").permitAll();
-            request.requestMatchers("/api/carts/**").permitAll();
+            request.requestMatchers("/api/carts/**").authenticated();
         });
         return http.build();
     }

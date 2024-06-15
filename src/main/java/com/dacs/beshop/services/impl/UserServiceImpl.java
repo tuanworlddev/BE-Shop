@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
                 .email(userRequestDto.getEmail())
                 .password(passwordEncoder.encode(userRequestDto.getPassword()))
                 .username(UUID.randomUUID().toString())
-                .role(Role.ADMIN)
+                .role(Role.USER)
                 .avatar("https://avatars.githubusercontent.com/u/162653271?v=4")
                 .build();
         userRepository.save(user);

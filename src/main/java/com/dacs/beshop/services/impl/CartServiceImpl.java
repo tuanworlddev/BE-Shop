@@ -1,45 +1,80 @@
 package com.dacs.beshop.services.impl;
 
+import com.dacs.beshop.config.SecurityUtil;
 import com.dacs.beshop.dto.request.CartRequestDto;
 import com.dacs.beshop.entities.Cart;
 import com.dacs.beshop.entities.User;
+import com.dacs.beshop.exceptions.NotFoundException;
 import com.dacs.beshop.repositories.CartRepository;
-import com.dacs.beshop.services.CartItemService;
+import com.dacs.beshop.repositories.UserRepository;
 import com.dacs.beshop.services.CartService;
+import com.dacs.beshop.services.ProductVariantService;
 import com.dacs.beshop.services.UserService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService {
-    private final CartRepository cartRepository;
     private final UserService userService;
-    private final CartItemService cartItemService;
+    private final CartRepository cartRepository;
+    private final ProductVariantService productVariantService;
 
-    public CartServiceImpl(CartRepository cartRepository, UserService userService, CartItemService cartItemService) {
-        this.cartRepository = cartRepository;
+    public CartServiceImpl(UserService userService, CartRepository cartRepository, ProductVariantService productVariantService) {
         this.userService = userService;
-        this.cartItemService = cartItemService;
+        this.cartRepository = cartRepository;
+        this.productVariantService = productVariantService;
+    }
+
+
+
+    @Override
+    public List<Cart> getCarts() {
+        String userEmail = SecurityUtil.getCurrentEmail();
+        if (userEmail != null) {
+            User user = userService.getUserByEmail(userEmail);
+            if (user != null) {
+                return cartRepository.findCartsByUser(user);
+            }
+        }
+        return List.of();
     }
 
     @Override
-    public List<Cart> getCartsByUser(Integer userId) {
-        User user = userService.getUserById(userId);
-        return cartRepository.findCartsByUser(user);
+    public Cart getCartById(Integer id) {
+        return cartRepository.findById(id).orElseThrow(() -> new NotFoundException("Cart not found"));
     }
 
     @Override
     public void addCart(CartRequestDto cartRequestDto) {
-        User user = userService.getUserById(cartRequestDto.getUserId());
-        Cart cart = Cart.builder()
-                .user(user)
-                .total(cartRequestDto.getTotal())
-                .build();
-        final Cart cartSave = cartRepository.save(cart);
-        cartRequestDto.getCartItems().forEach(cartItem -> cartItemService.addCartItem(cartSave, cartItem));
+        String userEmail = SecurityUtil.getCurrentEmail();
+        if (userEmail != null) {
+            User user = userService.getUserByEmail(userEmail);
+            if (user != null) {
+                Cart cart = Cart.builder()
+                        .user(user)
+                        .quantity(cartRequestDto.getQuantity())
+                        .productVariant(productVariantService.getProductVariant(cartRequestDto.getVariantId()))
+                        .build();
+                cartRepository.save(cart);
+            }
+        }
     }
 
+    @Override
+    public void updateQuantity(Integer cartId, Integer quantity) {
+        Cart cart = getCartById(cartId);
+        cart.setQuantity(quantity);
+        cartRepository.save(cart);
+    }
+
+    @Override
+    public void deleteCart(Integer cartId) {
+        if (cartRepository.existsById(cartId)) {
+            cartRepository.deleteById(cartId);
+        } else {
+            throw new NotFoundException("Cart not found");
+        }
+    }
 
 }
