@@ -10,6 +10,7 @@ public class OrderMapper {
                 .total(orderDetails.getTotal())
                 .status(orderDetails.getStatus().name())
                 .items(orderDetails.getItems().stream().map(OrderItemMapper::toOrderItemRequestDto).toList())
+                .address(AddressMapper.toAddressDto(orderDetails.getAddress()))
                 .build();
     }
 }

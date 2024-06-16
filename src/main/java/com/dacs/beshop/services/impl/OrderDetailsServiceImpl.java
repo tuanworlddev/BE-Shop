@@ -22,12 +22,14 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
     private final UserService userService;
     private final OrderItemService orderItemService;
     private final AddressService addressService;
+    private final EmailService emailService;
 
-    public OrderDetailsServiceImpl(OrderDetailsRepository orderDetailsRepository, UserService userService, OrderItemService orderItemService, AddressService addressService) {
+    public OrderDetailsServiceImpl(OrderDetailsRepository orderDetailsRepository, UserService userService, OrderItemService orderItemService, AddressService addressService, EmailService emailService) {
         this.orderDetailsRepository = orderDetailsRepository;
         this.userService = userService;
         this.orderItemService = orderItemService;
         this.addressService = addressService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -70,6 +72,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
         OrderDetails orderDetails = getOrderDetails(orderId);
         orderDetails.setStatus(orderStatus);
         orderDetailsRepository.save(orderDetails);
+        emailService.sendMessageUpdateStatus(getCurrentUser().getEmail(), orderDetails);
     }
 
     private User getCurrentUser() {

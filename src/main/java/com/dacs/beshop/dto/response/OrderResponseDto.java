@@ -14,4 +14,5 @@ public class OrderResponseDto {
     private Double total;
     private String status;
     private List<OrderItemResponseDto> items;
+    private AddressResponseDto address;
 }
