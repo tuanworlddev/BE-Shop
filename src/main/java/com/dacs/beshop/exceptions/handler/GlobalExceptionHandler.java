@@ -3,6 +3,7 @@ package com.dacs.beshop.exceptions.handler;
 import com.dacs.beshop.dto.response.ResponseDto;
 import com.dacs.beshop.exceptions.AlreadyExistsException;
 import com.dacs.beshop.exceptions.InvalidException;
+import com.dacs.beshop.exceptions.NotAuthenticatedException;
 import com.dacs.beshop.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidException.class)
     public ResponseEntity<ResponseDto> handleUserInvalidException(InvalidException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseDto(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
+    }
+
+    @ExceptionHandler(NotAuthenticatedException.class)
+    public ResponseEntity<ResponseDto> handleUserNotAuthenticatedException(NotAuthenticatedException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseDto(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
     }
 }

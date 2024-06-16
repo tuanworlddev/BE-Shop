@@ -22,11 +22,19 @@ public class OrderDetails {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address address;
+
     @Column
     private Double total;
 
-    @Column
-    private String status;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    @OneToMany(mappedBy = "orderDetails", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

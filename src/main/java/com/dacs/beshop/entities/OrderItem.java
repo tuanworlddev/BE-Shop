@@ -25,11 +25,8 @@ public class OrderItem {
     @JoinColumn(name = "product_variant_id", nullable = false)
     private ProductVariant productVariant;
 
-    @Column
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
-
-    @Column
-    private Double price;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

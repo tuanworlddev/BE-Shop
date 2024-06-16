@@ -33,9 +33,6 @@ public class Address {
     @Column
     private String commune;
 
-    @Column
-    private String note;
-
     @Column(name = "address_line")
     private String addressLine;
 
