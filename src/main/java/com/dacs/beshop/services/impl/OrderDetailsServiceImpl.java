@@ -8,10 +8,7 @@ import com.dacs.beshop.entities.User;
 import com.dacs.beshop.exceptions.NotAuthenticatedException;
 import com.dacs.beshop.exceptions.NotFoundException;
 import com.dacs.beshop.repositories.OrderDetailsRepository;
-import com.dacs.beshop.services.AddressService;
-import com.dacs.beshop.services.OrderDetailsService;
-import com.dacs.beshop.services.OrderItemService;
-import com.dacs.beshop.services.UserService;
+import com.dacs.beshop.services.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,7 +69,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
         OrderDetails orderDetails = getOrderDetails(orderId);
         orderDetails.setStatus(orderStatus);
         orderDetailsRepository.save(orderDetails);
-        emailService.sendMessageUpdateStatus(getCurrentUser().getEmail(), orderDetails);
+        emailService.sendMessageUpdateStatus(orderDetails.getUser().getEmail(), orderDetails);
     }
 
     private User getCurrentUser() {

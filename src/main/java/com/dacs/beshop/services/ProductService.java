@@ -11,5 +11,4 @@ public interface ProductService {
     List<Product> getProductsByCategory(Integer categoryId);
     Product getProductById(Integer id);
     void addProduct(ProductRequestDto productRequestDto);
-
 }

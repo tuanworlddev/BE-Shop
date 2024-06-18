@@ -11,4 +11,5 @@ public interface ProductVariantService {
     List<ProductVariant> getAllProductVariants();
     void addProductVariant(ProductVariantRequestDto productVariantRequestDto, Product product);
     void deleteProductVariant(Integer id);
+    void updateQuantityProductVariant(Integer id, Integer count);
 }

@@ -55,4 +55,11 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         productVariantRepository.deleteById(id);
     }
 
+    @Override
+    public void updateQuantityProductVariant(Integer id, Integer count) {
+        ProductVariant productVariant = getProductVariant(id);
+        productVariant.setQuantity(productVariant.getQuantity() - count);
+        productVariantRepository.save(productVariant);
+    }
+
 }
