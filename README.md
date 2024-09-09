@@ -1,2 +1,2 @@
 # Introduction
-## Backend Shop used Spring security, jwt, mysql
+## Backend Shop used Spring security, jwt, jpa, mysql, send mail,...
